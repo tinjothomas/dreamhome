@@ -1,0 +1,57 @@
+"use client";
+
+import React from "react";
+import Link from "next/link";
+import Footer from "@/components/footer";
+import Header from "@/components/header";
+
+export default function page() {
+  return (
+    <div className="bg-white pt-6 max-w-7xl">
+      <Header />
+      <div className="px-12 py-14">
+        <h1 className="font-light text-5xl leading-normal max-w-lg">
+          Empowering <span className="font-medium">Artists</span>. Connecting
+          Creativity with the World.
+        </h1>
+      </div>
+      <div className="flex flex-col md:flex-row md:px-12 px-6 py-20">
+        <img
+          className="rounded-xl max-h-[500px]"
+          src="/IMG_9266.PNG"
+          alt="calendar"
+        />
+        <div className="flex flex-col mt-12 md:mt-0 md:px-12 justify-between">
+          <div className="flex flex-col">
+            <p className="text-red-400">New Launch</p>
+            <h2 className="text-2xl text-slate-800">
+              2025 Artistic Calendar by{" "}
+            </h2>
+            <a
+              target="_blank"
+              href="https://www.facebook.com/artpageofvtsujith"
+              className="flex items-center mt-6 gap-4 hover:translate-x-2 transition">
+              <img className="max-h-28 rounded-full" src="/sujith.jpg" alt="" />
+              <p className="text-slate-500 text-2xl">SujithNavam</p>
+            </a>
+          </div>
+          <div className="flex flex-col items-start">
+            <p className="text-slate-600 mt-4">
+              Table-Top Calendar, featuring 12 original paintings. <br />{" "}
+              Perfect for your desk or as a gift!
+            </p>
+            <p className="text-lg text-slate-800 my-4">
+              Pre-booking has started only limited numbers available
+            </p>
+            <Link
+              className="bg-red-400 shadow-md hover:bg-green-500 p-4 px-6 text-white font-medium rounded-md"
+              href="/sujithnavam">
+              Book Now Rs.299/-
+            </Link>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}

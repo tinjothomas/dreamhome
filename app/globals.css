@@ -80,3 +80,56 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Style markdown content within articles */
+.markdown-content h1 {
+  @apply text-2xl font-bold mt-8 mb-4;
+}
+
+.markdown-content h2 {
+  @apply text-xl font-bold mt-8 mb-4;
+}
+
+.markdown-content h3 {
+  @apply text-lg font-bold mt-6 mb-3;
+}
+
+.markdown-content h4 {
+  @apply text-lg font-bold mt-6 mb-3;
+}
+
+.markdown-content p {
+  @apply text-base leading-relaxed mb-4 text-gray-800;
+}
+
+/* Last updated text styling */
+.markdown-content .last-updated {
+  @apply text-sm text-gray-600 mb-8;
+}
+
+/* List styling */
+.markdown-content ul {
+  @apply mb-4 ml-6;
+}
+
+.markdown-content ul li {
+  @apply mb-2 list-disc;
+}
+
+/* Nested list styling */
+.markdown-content ul ul {
+  @apply mt-2 ml-6;
+}
+
+.markdown-content ul ul li {
+  @apply mb-2;
+}
+
+/* Company address styling */
+.markdown-content .company-address {
+  @apply mb-8;
+}
+
+.markdown-content .company-address p {
+  @apply mb-1; /* Tighter spacing for address lines */
+}
