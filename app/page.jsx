@@ -9,13 +9,13 @@ export default function page() {
   return (
     <div className="bg-white pt-6 max-w-7xl">
       <Header />
-      <div className="px-12 py-14">
-        <h1 className="font-light text-5xl leading-normal max-w-lg">
+      <div className="px-6 md:px-12 py-14">
+        <h1 className="font-light text-3xl md:text-5xl leading-normal md:leading-normal max-w-lg">
           Empowering <span className="font-medium">Artists</span>. Connecting
           Creativity with the World.
         </h1>
       </div>
-      <div className="flex flex-col md:flex-row md:px-12 px-6 py-20">
+      <div className="flex flex-col md:flex-row md:px-12 px-6 md:py-20 py-5">
         <img
           className="rounded-xl max-h-[500px]"
           src="/IMG_9266.PNG"

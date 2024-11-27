@@ -4,7 +4,7 @@ Last Updated: November 27, 2024
 
 #### 1. Introduction
 
-Welcome to Coredes Interactive Private Limited ("we," "our," or "Company"). These Terms and Conditions govern your use of our website and services located at [website URL] and all related services. By accessing or using our website, you agree to be bound by these terms.
+Welcome to Kvika by Coredes Interactive Private Limited ("we," "our," or "Company"). These Terms and Conditions govern your use of our website and services located at www.kvika.in and all related services. By accessing or using our website, you agree to be bound by these terms.
 
 #### 2. Company Information
 
