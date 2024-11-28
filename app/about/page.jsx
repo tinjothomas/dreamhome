@@ -7,7 +7,7 @@ export default function Page() {
   return (
     <div className="md:px-12 scroll-px-6 md:py-14 py-7">
       <h1 className="font-light text-3xl text-slate-900 leading-normal max-w-lg">
-        <span className="font-medium">Kvika</span>, a home gown design brand
+        <span className="font-medium">Kvika</span>, a homegrown design brand
         from{" "}
         <span>
           <a

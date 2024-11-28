@@ -41,7 +41,7 @@ export default function page() {
               Perfect for your desk or as a gift!
             </p>
             <p className="text-lg text-slate-800 my-4">
-              Pre-booking has started only limited numbers available
+              Pre-booking has started, with only limited numbers available.
             </p>
             <Link
               className="bg-red-400 shadow-md hover:bg-green-500 p-4 px-6 text-white font-medium rounded-md"

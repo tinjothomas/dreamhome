@@ -44,9 +44,7 @@ Last Updated: November 27, 2024
 - Cancelled orders (before shipping)
 - Cases where we cannot fulfill the order
   3.2. Refund Process:
-- Refunds will be initiated after we receive and inspect the returned product
-- For online payments, refund will be processed to the original payment method
-- Processing time is 5-7 business days after product inspection
+- Once the refund request is approved,The Refunded Amount will be processed and credited within 5-7 business Days to the original mode of payment.
 - Additional bank processing time may apply
   3.3. Refund Amount:
 - Full refund for defective products and cancelled orders

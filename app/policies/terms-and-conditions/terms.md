@@ -38,6 +38,8 @@ India
 5.1. We deliver products across India.
 5.2. Shipping costs and estimated delivery times will be provided during checkout.
 5.3. Risk of loss and title for items purchased pass to you upon delivery to the shipping carrier.
+5.4 Once the order is placed, shipping would be done in 3-4 business days
+5.5 The estimated delivery time would be 3-5 business days.
 
 #### 6. Product Warranty
 
@@ -56,7 +58,7 @@ India
 
 #### 9. Privacy Policy
 
-9.1. Our collection and use of personal information is governed by our Privacy Policy, available at [Privacy Policy URL].
+9.1. Our collection and use of personal information is governed by our Privacy Policy, available at [Privacy Policy](https://www.kvika.in/policies/privacy-policy).
 
 #### 10. Governing Law
 
