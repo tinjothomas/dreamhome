@@ -46,14 +46,16 @@ export default async function handler(req, res) {
       merchantTransactionId: enrichedOrderData.orderNumber,
       merchantUserId: `MUID${Date.now()}`,
       amount: Math.round(orderData.totalAmount * 100), // Convert to paise
-      redirectUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/payment-success`,
-      redirectMode: "REDIRECT",
+      redirectUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment-success`,
+      redirectMode: "POST",
       callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment-callback`,
       mobileNumber: orderData.phone,
       paymentInstrument: {
         type: "PAY_PAGE",
       },
     };
+
+    console.log(paymentPayload.redirectUrl);
 
     console.log("Making request to:", PHONEPE_API_URL);
 
