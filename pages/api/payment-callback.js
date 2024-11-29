@@ -27,15 +27,24 @@ export default async function handler(req, res) {
       headers: req.headers,
     });
 
-    // Extract data from callback
+    // Decode base64 response
+    const decodedResponse = JSON.parse(
+      Buffer.from(req.body.response, "base64").toString("utf-8")
+    );
+
+    console.log("Decoded response:", decodedResponse);
+
+    // Extract data from decoded response
     const {
-      merchantId,
-      merchantTransactionId,
-      transactionId,
-      amount,
-      responseCode,
-      status,
-    } = req.body;
+      data: {
+        merchantId,
+        merchantTransactionId,
+        transactionId,
+        amount,
+        responseCode,
+        state: status,
+      },
+    } = decodedResponse;
 
     // Validate required fields
     if (!merchantTransactionId) {
@@ -67,6 +76,11 @@ export default async function handler(req, res) {
     if (transactionId) updateData.paymentId = transactionId;
     if (amount) updateData.paidAmount = amount;
 
+    // Add payment instrument details if available
+    if (decodedResponse.data.paymentInstrument) {
+      updateData.paymentInstrument = decodedResponse.data.paymentInstrument;
+    }
+
     // Update the order
     await orderDoc.ref.update(updateData);
 
@@ -74,6 +88,7 @@ export default async function handler(req, res) {
     console.log("Order updated successfully:", {
       orderId: orderDoc.id,
       status: status,
+      transactionId: transactionId,
     });
 
     res.status(200).json({ success: true });

@@ -1,23 +1,17 @@
 // app/payment-success/page.js
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-export default function PaymentSuccessPage() {
+function PaymentStatusContent() {
   const searchParams = useSearchParams();
-  const [status, setStatus] = useState("processing");
-
-  useEffect(() => {
-    const transactionId = searchParams.get("transactionId");
-    const merchantTransactionId = searchParams.get("merchantTransactionId");
-
-    if (transactionId && merchantTransactionId) {
-      setStatus("success");
-    }
-  }, [searchParams]);
+  const transactionId = searchParams.get("transactionId");
+  const merchantTransactionId = searchParams.get("merchantTransactionId");
+  const status =
+    transactionId && merchantTransactionId ? "success" : "processing";
 
   return (
     <Card className="w-full max-w-2xl mx-auto mt-8">
@@ -39,11 +33,36 @@ export default function PaymentSuccessPage() {
 
         {status === "success" && (
           <div className="text-center mt-4">
-            <p>Transaction ID: {searchParams.get("transactionId")}</p>
-            <p>Order Number: {searchParams.get("merchantTransactionId")}</p>
+            <p>Transaction ID: {transactionId}</p>
+            <p>Order Number: {merchantTransactionId}</p>
           </div>
         )}
       </CardContent>
     </Card>
+  );
+}
+
+function LoadingState() {
+  return (
+    <Card className="w-full max-w-2xl mx-auto mt-8">
+      <CardHeader>
+        <CardTitle className="text-center">Loading...</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Alert>
+          <AlertDescription>
+            Please wait while we load your payment details...
+          </AlertDescription>
+        </Alert>
+      </CardContent>
+    </Card>
+  );
+}
+
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense fallback={<LoadingState />}>
+      <PaymentStatusContent />
+    </Suspense>
   );
 }
