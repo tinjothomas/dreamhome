@@ -200,29 +200,29 @@ const PrebookForm = () => {
         status: "pending",
       };
 
-      const response = await fetch("/api/orders", {
+      const response = await fetch("/api/initiate-payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(orderData),
+        body: JSON.stringify({ orderData }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to save order");
+        throw new Error("Failed to initiate payment");
       }
 
       const data = await response.json();
 
-      setOrderDetails({
-        ...orderData,
-        orderId: data.orderId,
-      });
-
-      setOrderComplete(true);
+      if (data.success) {
+        // Redirect to PhonePe payment page
+        window.location.href = data.paymentRedirectUrl;
+      } else {
+        throw new Error("Payment initiation failed");
+      }
     } catch (error) {
-      console.error("Error saving order:", error);
-      alert("There was an error placing your order. Please try again.");
+      console.error("Error processing order:", error);
+      alert("There was an error processing your payment. Please try again.");
     } finally {
       setIsLoading(false);
     }
