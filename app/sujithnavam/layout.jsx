@@ -5,18 +5,29 @@ export const metadata = {
   description:
     "Table-Top Calendar, featuring 12 original paintings. Perfect for your desk or as a gift!",
   keywords: ["calendar 2025", "art calendar"],
-  openGraph: {
-    title: "Pre-book 2025 Calendar by SujithNavam",
-    description:
-      "Table-Top Calendar, featuring 12 original paintings. Perfect for your desk or as a gift!",
-    images: ["/IMG_9266.PNG"],
-  },
   twitter: {
     card: "summary_large_image",
     title: "Pre-book 2025 Calendar by SujithNavam",
     description:
       "Table-Top Calendar, featuring 12 original paintings. Perfect for your desk or as a gift!",
-    images: ["/IMG_9266.PNG"],
+    images: [
+      "https://www.kvika.in/mockup.jpg", // Replace with your actual image URL
+    ],
+  },
+  openGraph: {
+    title: "Pre-book 2025 Calendar by SujithNavam",
+    description:
+      "Table-Top Calendar, featuring 12 original paintings. Perfect for your desk or as a gift!",
+    url: "https://www.kvika.in/sujithnavam", // Replace with your actual page URL
+    type: "website",
+    images: [
+      {
+        url: "https://www.kvika.in/mockup_1200.jpg", // Replace with your actual image URL
+        width: 1200,
+        height: 960,
+        alt: "Table-Top Calendar featuring original art by SujithNavam",
+      },
+    ],
   },
 };
 

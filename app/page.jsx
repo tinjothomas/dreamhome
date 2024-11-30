@@ -18,7 +18,7 @@ export default function page() {
       <div className="flex flex-col md:flex-row md:px-12 px-6 md:py-20 py-5">
         <img
           className="rounded-xl max-h-[500px]"
-          src="/IMG_9266.PNG"
+          src="/mockup.jpg"
           alt="calendar"
         />
         <div className="flex flex-col mt-12 md:mt-0 md:px-12 justify-between">

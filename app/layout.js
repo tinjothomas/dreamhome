@@ -7,10 +7,7 @@ export const metadata = {
   title: "Kvika | Art and Decor",
   description: "Connecting Creativity with the World.",
   icons: {
-    icon: "/favicon.ico",
-    // You can also specify different sizes and types
-    apple: "/apple-touch-icon.png",
-    shortcut: "/shortcut-icon.png",
+    icon: "favicon.svg",
   },
 };
 

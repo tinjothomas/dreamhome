@@ -234,14 +234,20 @@ const PrebookForm = () => {
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <h2 className="text-2xl font-semibold">
-          Pre-book 2025 Calendar by SujithNavam
-        </h2>
-        <p className="text-sm text-muted-foreground mt-2">
-          Complete the pre-booking form below. Payment link will be sent to your
-          email after confirmation.
-        </p>
+      <CardHeader className="flex items-center flex-row">
+        <img
+          className="w-40 rounded-lg mr-4"
+          src="mockup.jpg"
+          alt="calendar image"
+        />
+        <div>
+          <h2 className="md:text-2xl text-xl font-semibold">
+            Pre-book 2025 Calendar by SujithNavam
+          </h2>
+          <p className="text-sm text-muted-foreground mt-2">
+            Complete the pre-booking form below.
+          </p>
+        </div>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
