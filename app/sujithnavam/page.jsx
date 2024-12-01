@@ -21,84 +21,13 @@ import {
 import { Minus, Plus } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-const SuccessPage = ({ orderDetails }) => {
-  return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-center text-green-600">
-          Pre-booking Confirmed!
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Alert className="mb-6">
-          <AlertTitle>Pre-booking Successfully Placed!</AlertTitle>
-          <AlertDescription>
-            You’ll receive an email within 24 hours, containing the payment link
-            and further instructions. Once you’ve made the payment, your order
-            will be confirmed.
-          </AlertDescription>
-        </Alert>
-
-        <div className="space-y-4">
-          <div className="border-t pt-4">
-            <h3 className="font-semibold mb-4">Pre-booking Summary</h3>
-            <div className="space-y-2">
-              <p>
-                <span className="font-medium">Booking ID:</span>{" "}
-                {orderDetails.orderId}
-              </p>
-              <p>
-                <span className="font-medium">Name:</span>{" "}
-                {orderDetails.fullName}
-              </p>
-              <p>
-                <span className="font-medium">Email:</span> {orderDetails.email}
-              </p>
-              <p>
-                <span className="font-medium">Quantity:</span>{" "}
-                {orderDetails.quantity}
-              </p>
-              <p>
-                <span className="font-medium">Amount to be Paid:</span> ₹
-                {orderDetails.totalAmount}
-              </p>
-            </div>
-          </div>
-
-          <div className="border-t pt-4">
-            <h3 className="font-semibold mb-4">Delivery Details</h3>
-            <div className="space-y-2">
-              <p>{orderDetails.addressLine1}</p>
-              {orderDetails.addressLine2 && <p>{orderDetails.addressLine2}</p>}
-              <p>
-                {orderDetails.state} - {orderDetails.pinCode}
-              </p>
-              <p>
-                <span className="font-medium">Phone:</span> {orderDetails.phone}
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-blue-50 p-4 rounded-md mt-6">
-            <h4 className="font-medium mb-2">Next Steps:</h4>
-            <ol className="list-decimal ml-4 space-y-1">
-              <li>Check your email for the payment link</li>
-              <li>Complete the payment to confirm your order</li>
-              <li>You'll receive an order confirmation after payment</li>
-            </ol>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
-
 const PrebookForm = () => {
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     email: "",
     phone: "",
@@ -111,19 +40,30 @@ const PrebookForm = () => {
 
   // Validation function
   const validateForm = () => {
+    const newErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^[0-9]{10}$/;
     const pinCodeRegex = /^[0-9]{6}$/;
 
-    const isValid =
-      formData.email.match(emailRegex) &&
-      formData.phone.match(phoneRegex) &&
-      formData.fullName.trim().length > 0 &&
-      formData.addressLine1.trim().length > 0 &&
-      formData.state &&
-      formData.pinCode.match(pinCodeRegex);
+    if (!formData.email.match(emailRegex)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+    if (!formData.phone.match(phoneRegex)) {
+      newErrors.phone =
+        "Only include 10-digit phone number. Remove area codes (+91, 0) etc";
+    }
+    if (formData.fullName.trim().length === 0) {
+      newErrors.fullName = "Full name is required";
+    }
+    if (formData.addressLine1.trim().length === 0) {
+      newErrors.addressLine1 = "Address is required";
+    }
+    if (!formData.pinCode.match(pinCodeRegex)) {
+      newErrors.pinCode = "Please enter a valid 6-digit PIN code";
+    }
 
-    setIsFormValid(isValid);
+    setErrors(newErrors);
+    setIsFormValid(Object.keys(newErrors).length === 0);
   };
 
   // Run validation whenever form data changes
@@ -187,7 +127,11 @@ const PrebookForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isFormValid) return;
+    if (!isFormValid) {
+      // Show all validation errors when attempting to submit
+      validateForm();
+      return;
+    }
 
     setIsLoading(true);
 
@@ -215,7 +159,6 @@ const PrebookForm = () => {
       const data = await response.json();
 
       if (data.success) {
-        // Redirect to PhonePe payment page
         window.location.href = data.paymentRedirectUrl;
       } else {
         throw new Error("Payment initiation failed");
@@ -294,16 +237,15 @@ const PrebookForm = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="Enter your email"
+                className={errors.email ? "border-red-500" : ""}
               />
+              {errors.email && (
+                <p className="text-sm text-red-500 mt-1">{errors.email}</p>
+              )}
             </div>
 
             <div>
-              <Label htmlFor="phone">
-                Phone Number{" "}
-                {/* <span className="tex-sm text-slate-500">
-                  (avoid country code and 0)
-                </span> */}
-              </Label>
+              <Label htmlFor="phone">Phone Number</Label>
               <Input
                 required
                 type="tel"
@@ -313,7 +255,11 @@ const PrebookForm = () => {
                 onChange={handleInputChange}
                 placeholder="Enter your phone number"
                 pattern="[0-9]{10}"
+                className={errors.phone ? "border-red-500" : ""}
               />
+              {errors.phone && (
+                <p className="text-sm text-red-500 mt-1">{errors.phone}</p>
+              )}
             </div>
 
             <div>
@@ -326,7 +272,11 @@ const PrebookForm = () => {
                 value={formData.fullName}
                 onChange={handleInputChange}
                 placeholder="Enter your full name"
+                className={errors.fullName ? "border-red-500" : ""}
               />
+              {errors.fullName && (
+                <p className="text-sm text-red-500 mt-1">{errors.fullName}</p>
+              )}
             </div>
 
             <div>
@@ -339,7 +289,13 @@ const PrebookForm = () => {
                 value={formData.addressLine1}
                 onChange={handleInputChange}
                 placeholder="Enter your address"
+                className={errors.addressLine1 ? "border-red-500" : ""}
               />
+              {errors.addressLine1 && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.addressLine1}
+                </p>
+              )}
             </div>
 
             <div>
@@ -384,7 +340,11 @@ const PrebookForm = () => {
                 onChange={handleInputChange}
                 placeholder="Enter PIN code"
                 pattern="[0-9]{6}"
+                className={errors.pinCode ? "border-red-500" : ""}
               />
+              {errors.pinCode && (
+                <p className="text-sm text-red-500 mt-1">{errors.pinCode}</p>
+              )}
             </div>
           </div>
         </form>
@@ -395,9 +355,7 @@ const PrebookForm = () => {
           type="submit"
           onClick={handleSubmit}
           disabled={isLoading || !isFormValid}>
-          {isLoading
-            ? "Processing..."
-            : "Pre-book Now (₹" + quantity * 299 + ")"}
+          {isLoading ? "Processing..." : `Pre-book Now (₹${quantity * 299})`}
         </Button>
       </CardFooter>
     </Card>

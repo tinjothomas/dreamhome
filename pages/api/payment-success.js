@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   res.redirect(303, redirectUrl);
 }
 
-// pages/api/payment-success.js
+//pages/api/payment-success.js
 // import { initializeApp, getApps, cert } from "firebase-admin/app";
 // import { getFirestore } from "firebase-admin/firestore";
 // import crypto from "crypto";
@@ -95,7 +95,7 @@ export default async function handler(req, res) {
 //       merchantTransactionId
 //     );
 
-//     console.log(`this is payment status ${paymentStatus}`);
+//     console.log(`this is payment status ${JSON.stringify(paymentStatus)}`);
 //     await updateFirestore(merchantTransactionId, paymentStatus);
 
 //     const redirectUrl = `/payment-success?code=${code}&transactionId=${merchantTransactionId}&amount=${amount}`;
