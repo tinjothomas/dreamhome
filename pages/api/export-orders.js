@@ -37,6 +37,7 @@ const convertToCSV = (orders) => {
     "Address Line 2",
     "State",
     "PIN Code",
+    "Payment",
     "Status",
   ];
 
@@ -54,6 +55,7 @@ const convertToCSV = (orders) => {
     order.addressLine2 || "",
     order.state,
     order.pinCode,
+    order.paymentStatus,
     order.status,
   ]);
 

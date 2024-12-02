@@ -1,107 +1,167 @@
-// pages/api/payment-success.js
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+// // pages/api/payment-success.js
+// import sgMail from "@sendgrid/mail";
 
-  const { code, merchantId, transactionId, amount } = req.body;
-
-  const redirectUrl = `/payment-success?code=${code}&transactionId=${transactionId}&amount=${amount}`;
-
-  res.redirect(303, redirectUrl);
-}
-
-//pages/api/payment-success.js
-// import { initializeApp, getApps, cert } from "firebase-admin/app";
-// import { getFirestore } from "firebase-admin/firestore";
-// import crypto from "crypto";
-
-// if (!getApps().length) {
-//   initializeApp({
-//     credential: cert({
-//       projectId: process.env.FIREBASE_PROJECT_ID,
-//       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-//       privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-//     }),
-//   });
-// }
-
-// const db = getFirestore();
-
-// async function checkPaymentStatus(merchantId, merchantTransactionId) {
-//   const string =
-//     `/pg/v1/status/${merchantId}/${merchantTransactionId}` +
-//     process.env.PHONEPE_MERCHANT_SALT_KEY;
-//   const sha256 = crypto.createHash("sha256").update(string).digest("hex");
-//   const xVerify = sha256 + "###" + process.env.PHONEPE_SALT_INDEX;
-
-//   // Fix: Add 'pg/v1' to the path
-//   const apiUrl = process.env.PHONEPE_API_URL;
-
-//   const response = await fetch(
-//     `${apiUrl}/${merchantId}/${merchantTransactionId}`,
-//     {
-//       headers: {
-//         "Content-Type": "application/json",
-//         "X-VERIFY": xVerify,
-//         "X-MERCHANT-ID": merchantId,
-//       },
-//     }
-//   );
-
-//   if (!response.ok) {
-//     console.error("Status check failed:", await response.text());
-//     throw new Error("Payment status check failed");
-//   }
-
-//   return response.json();
-// }
-
-// async function updateFirestore(merchantTransactionId, paymentStatus) {
-//   const ordersRef = db.collection("orders");
-//   const orderSnapshot = await ordersRef
-//     .where("orderNumber", "==", merchantTransactionId)
-//     .get();
-
-//   if (!orderSnapshot.empty) {
-//     const orderDoc = orderSnapshot.docs[0];
-//     await orderDoc.ref.update({
-//       paymentStatus: paymentStatus.data.state,
-//       paymentResponseCode: paymentStatus.data.responseCode,
-//       lastUpdated: new Date().toISOString(),
-//       transactionId: paymentStatus.data.transactionId,
-//       paymentInstrument: paymentStatus.data.paymentInstrument || null,
-//     });
-//   }
-// }
+// // Initialize SendGrid with your API key
+// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // export default async function handler(req, res) {
 //   if (req.method !== "POST") {
 //     return res.status(405).json({ error: "Method not allowed" });
 //   }
 
-//   const {
-//     code,
-//     merchantId,
-//     transactionId: merchantTransactionId,
-//     amount,
-//   } = req.body;
-
-//   console.log(req.body);
-
 //   try {
-//     const paymentStatus = await checkPaymentStatus(
-//       merchantId,
-//       merchantTransactionId
-//     );
+//     const { code, merchantId, transactionId, amount } = req.body;
 
-//     console.log(`this is payment status ${JSON.stringify(paymentStatus)}`);
-//     await updateFirestore(merchantTransactionId, paymentStatus);
+//     // Configure email message
+//     const msg = {
+//       to: "tinjothomasc@gmail.com",
+//       from: "sales@coredes.io",
+//       subject: "Payment Success Confirmation",
+//       text: `Payment successful!\n\nTransaction ID: ${transactionId}\nAmount: ${amount}\nMerchant ID: ${merchantId}\nCode: ${code}`,
+//       html: `
+//         <h2>Payment Successful!</h2>
+//         <p>Your payment has been processed successfully. Here are the details:</p>
+//         <ul>
+//           <li><strong>Transaction ID:</strong> ${transactionId}</li>
+//           <li><strong>Amount:</strong> ${amount}</li>
+//           <li><strong>Merchant ID:</strong> ${merchantId}</li>
+//           <li><strong>Code:</strong> ${code}</li>
+//         </ul>
+//         <p>Thank you for your business!</p>
+//       `,
+//     };
 
-//     const redirectUrl = `/payment-success?code=${code}&transactionId=${merchantTransactionId}&amount=${amount}`;
+//     // Send email
+//     await sgMail.send(msg);
+
+//     // Redirect to success page
+//     const redirectUrl = `/payment-success?code=${code}&transactionId=${transactionId}&amount=${amount}`;
 //     res.redirect(303, redirectUrl);
 //   } catch (error) {
-//     console.error("Payment status check error:", error);
-//     res.redirect(303, `/payment-success?error=true`);
+//     console.error("Error:", error);
+//     return res
+//       .status(500)
+//       .json({ error: "Failed to process payment notification" });
 //   }
 // }
+
+// pages/api/payment-success.js
+import { initializeApp, getApps, cert } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
+import sgMail from "@sendgrid/mail";
+
+// Initialize SendGrid with your API key
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+if (!getApps().length) {
+  initializeApp({
+    credential: cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+    }),
+  });
+}
+
+const db = getFirestore();
+
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  try {
+    const { code, merchantId, transactionId, amount } = req.body;
+
+    // Find the order from Firebase
+    const ordersRef = db.collection("orders");
+    const orderSnapshot = await ordersRef
+      .where("orderNumber", "==", transactionId)
+      .get();
+
+    if (orderSnapshot.empty) {
+      throw new Error("Order not found");
+    }
+
+    // Get the order data
+    const orderDoc = orderSnapshot.docs[0];
+    const orderData = orderDoc.data();
+
+    // Configure email message
+    const msg = {
+      to: orderData.email,
+      from: "sales@coredes.io",
+      subject: "Order Confirmation - Thank you for your order!",
+      text: `
+        Dear ${orderData.fullName},
+
+        Thank you for your order!
+
+        Order Details:
+        Order Number: ${orderData.orderNumber}
+        Order Date: ${new Date(orderData.createdAt).toLocaleString()}
+        Amount Paid: ₹${orderData.paidAmount / 100}
+
+        Shipping Address:
+        ${orderData.addressLine1}
+        ${orderData.addressLine2}
+        ${orderData.state} ${orderData.pinCode}
+        
+        We’ll process your order soon as soon as the payment is confirmed!
+
+        If you need any assistance, feel free to reach out to us at sales@coredes.io or call us at +91 725969 3630.
+
+        Thank you for shopping with us!
+      `,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2>Order Confirmation</h2>
+          <p>Dear ${orderData.fullName},</p>
+          <p>Thank you for your order!</p>
+          
+          <h3>Order Details</h3>
+          <p>
+            <strong>Order Number:</strong> ${orderData.orderNumber}<br>
+            <strong>Order Date:</strong> ${new Date(
+              orderData.createdAt
+            ).toLocaleString()}<br>
+            <strong>Amount Paid:</strong> ₹${orderData.paidAmount / 100}<br>
+            <strong>Quantity:</strong> ${orderData.quantity}
+          </p>
+
+          <h3>Shipping Address</h3>
+          <p>
+            ${orderData.addressLine1}<br>
+            ${orderData.addressLine2}<br>
+            ${orderData.state} ${orderData.pinCode}
+          </p>
+
+          <p>We’ll process your order soon as soon as the payment is confirmed!</p>
+          <p>f you need any assistance, feel free to reach out to us at sales@coredes.io or call us at +91 725969 3630.</p>
+          <p>Thank you for shopping with us!</p>
+        </div>
+      `,
+    };
+
+    // Send email
+    console.log(JSON.stringify(req.body));
+    await sgMail.send(msg);
+
+    // Update order status in Firebase
+    // await orderDoc.ref.update({
+    //   paymentStatus: "COMPLETED",
+    //   lastUpdated: new Date().toISOString(),
+    //   status: "payment_success",
+    // });
+
+    // Redirect to success page
+    const redirectUrl = `/payment-success?code=${code}&transactionId=${transactionId}&amount=${amount}`;
+    res.redirect(303, redirectUrl);
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({
+      error: "Failed to process payment notification",
+      details: error.message,
+    });
+  }
+}

@@ -1,7 +1,7 @@
 // app/payment-success/page.js
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -9,10 +9,44 @@ import Link from "next/link";
 
 function PaymentStatusContent() {
   const searchParams = useSearchParams();
+  const [paymentStatus, setPaymentStatus] = useState({ loading: true });
   const code = searchParams.get("code");
   const transactionId = searchParams.get("transactionId");
   const amount = searchParams.get("amount");
   const isSuccess = code === "PAYMENT_SUCCESS";
+
+  useEffect(() => {
+    const checkStatus = async () => {
+      try {
+        const response = await fetch(
+          `/api/check-payment-status?merchantTransactionId=${transactionId}`
+        );
+        const data = await response.json();
+        console.log(data);
+        setPaymentStatus({ loading: false, ...data });
+      } catch (error) {
+        setPaymentStatus({ loading: false, error: true });
+      }
+    };
+
+    if (transactionId) {
+      checkStatus();
+      // Set up polling based on PhonePe's recommended intervals
+      const intervals = [3000, 6000, 10000, 30000, 60000];
+      let currentIntervalIndex = 0;
+
+      const pollStatus = setInterval(async () => {
+        if (currentIntervalIndex < intervals.length) {
+          await checkStatus();
+          currentIntervalIndex++;
+        } else {
+          clearInterval(pollStatus);
+        }
+      }, intervals[currentIntervalIndex]);
+
+      return () => clearInterval(pollStatus);
+    }
+  }, [transactionId]);
 
   return (
     <div className="bg-slate-100 w-full min-h-screen">
