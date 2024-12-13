@@ -44,9 +44,10 @@ export default function page() {
               Pre-booking has started, with only limited numbers available.
             </p>
             <Link
+              data-splitbee-event="Buy now sujith"
               className="bg-red-400 shadow-md hover:bg-green-500 p-4 px-6 text-white font-medium rounded-md"
               href="/sujithnavam">
-              Book Now Rs.299/-
+              Buy Now Rs.399/-
             </Link>
           </div>
         </div>

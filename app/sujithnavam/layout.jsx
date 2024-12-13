@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Pre-book 2025 Calendar by SujithNavam",
+  title: "Buy 2025 Calendar by SujithNavam",
   description:
     "Table-Top Calendar, featuring 12 original paintings. Perfect for your desk or as a gift!",
   keywords: ["calendar 2025", "art calendar"],
@@ -15,7 +15,7 @@ export const metadata = {
     ],
   },
   openGraph: {
-    title: "Pre-book 2025 Calendar by SujithNavam",
+    title: "Buy 2025 Calendar by SujithNavam",
     description:
       "Table-Top Calendar, featuring 12 original paintings. Perfect for your desk or as a gift!",
     url: "https://www.kvika.in/sujithnavam", // Replace with your actual page URL
@@ -33,7 +33,7 @@ export const metadata = {
 
 export default function Layout({ children }) {
   return (
-    <div className="pt-6 bg-slate-100 flex flex-col items-center w-full min-h-screen">
+    <div className="bg-slate-100 flex py-3 md:py-6 flex-col items-center w-full min-h-screen">
       <Link href="/">
         <div className="max-w-xl flex items-center gap-4 w-full mb-4">
           <svg

@@ -1,13 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,7 +43,7 @@ const PrebookForm = () => {
     }
     if (!formData.phone.match(phoneRegex)) {
       newErrors.phone =
-        "Only include 10-digit phone number. Remove area codes (+91, 0) etc";
+        "Only include 10-digit phone number without space. Remove area codes (+91, 0) etc";
     }
     if (formData.fullName.trim().length === 0) {
       newErrors.fullName = "Full name is required";
@@ -139,7 +132,7 @@ const PrebookForm = () => {
       const orderData = {
         ...formData,
         quantity,
-        totalAmount: quantity * 299,
+        totalAmount: quantity * 399,
         timestamp: new Date().toISOString(),
         status: "pending",
       };
@@ -176,189 +169,199 @@ const PrebookForm = () => {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader className="flex items-center flex-row">
-        <img
-          className="w-40 rounded-lg mr-4"
-          src="mockup.jpg"
-          alt="calendar image"
-        />
-        <div>
-          <h2 className="md:text-2xl text-xl font-semibold">
-            Pre-book 2025 Calendar by SujithNavam
-          </h2>
-          <p className="text-sm text-muted-foreground mt-2">
-            Complete the pre-booking form below.
-          </p>
+    <div>
+      {/* container */}
+      <div className="flex flex-col bg-white rounded-md border shadow-md p-4">
+        {/* header */}
+        <div className="flex items-center flex-row border-b pb-4 mb-3">
+          <img
+            className="w-40 rounded-lg mr-4"
+            src="mockup.jpg"
+            alt="calendar image"
+          />
+          <div>
+            <h2 className="md:text-2xl text-xl font-semibold">
+              Buy 2025 Calendar by SujithNavam
+            </h2>
+            <p className="text-slate-500 mt-2">Delivery in 4-6 days</p>
+          </div>
         </div>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Product Quantity Section */}
-          <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-6">
-            <div className="flex justify-between items-center mb-2">
-              <span className="font-medium text-slate-600">Product Price:</span>
-              <span>₹299</span>
-            </div>
-            <div className="flex justify-between border-t border-b py-4 items-center">
-              <span className="font-medium text-slate-600">Quantity:</span>
-              <div className="flex items-center space-x-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleQuantityChange("decrease")}>
-                  <Minus className="h-4 w-4" />
-                </Button>
-                <span className="w-8 text-center">{quantity}</span>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleQuantityChange("increase")}>
-                  <Plus className="h-4 w-4" />
-                </Button>
+        {/* header ends */}
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="md:w-[448px]">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid gap-4">
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    required
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="Enter your email"
+                    className={errors.email ? "border-red-500" : ""}
+                  />
+                  {errors.email && (
+                    <p className="text-sm text-red-500 mt-1">{errors.email}</p>
+                  )}
+                </div>
+
+                <div>
+                  <Label htmlFor="phone">Phone Number</Label>
+                  <Input
+                    required
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    placeholder="Enter your phone number"
+                    pattern="[0-9]{10}"
+                    className={errors.phone ? "border-red-500" : ""}
+                  />
+                  {errors.phone && (
+                    <p className="text-sm text-red-500 mt-1">{errors.phone}</p>
+                  )}
+                </div>
+
+                <div>
+                  <Label htmlFor="fullName">Full Name</Label>
+                  <Input
+                    required
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleInputChange}
+                    placeholder="Enter your full name"
+                    className={errors.fullName ? "border-red-500" : ""}
+                  />
+                  {errors.fullName && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.fullName}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <Label htmlFor="addressLine1">Address Line 1</Label>
+                  <Input
+                    required
+                    type="text"
+                    id="addressLine1"
+                    name="addressLine1"
+                    value={formData.addressLine1}
+                    onChange={handleInputChange}
+                    placeholder="Enter your address"
+                    className={errors.addressLine1 ? "border-red-500" : ""}
+                  />
+                  {errors.addressLine1 && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.addressLine1}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <Label htmlFor="addressLine2">Address Line 2</Label>
+                  <Input
+                    type="text"
+                    id="addressLine2"
+                    name="addressLine2"
+                    value={formData.addressLine2}
+                    onChange={handleInputChange}
+                    placeholder="Apartment, suite, etc. (optional)"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="state">State</Label>
+                  <Select
+                    name="state"
+                    value={formData.state}
+                    onValueChange={handleStateChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a state" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {indianStates.map((state) => (
+                        <SelectItem key={state} value={state}>
+                          {state}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="pinCode">PIN Code</Label>
+                  <Input
+                    required
+                    type="text"
+                    id="pinCode"
+                    name="pinCode"
+                    value={formData.pinCode}
+                    onChange={handleInputChange}
+                    placeholder="Enter PIN code"
+                    pattern="[0-9]{6}"
+                    className={errors.pinCode ? "border-red-500" : ""}
+                  />
+                  {errors.pinCode && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.pinCode}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </form>
+          </div>
+          <div>
+            <div className="bg-yellow-50 border border-yellow-200 p-4 min-w-[280px] rounded-lg mb-6">
+              <div className="flex justify-between items-center mb-2">
+                <span className="font-medium text-slate-600">
+                  Product Price:
+                </span>
+                <span>₹399</span>
+              </div>
+              <div className="flex justify-between border-t border-b py-4 items-center">
+                <span className="font-medium text-slate-600">Quantity:</span>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleQuantityChange("decrease")}>
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <span className="w-8 text-center">{quantity}</span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleQuantityChange("increase")}>
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              <div className="flex justify-between items-center mt-2 font-medium">
+                <span className="text-slate-600">Total Amount:</span>
+                <span className="text-xl">₹{quantity * 399}</span>
               </div>
             </div>
-            <div className="flex justify-between items-center mt-2 font-medium">
-              <span className="text-slate-600">Total Amount:</span>
-              <span className="text-xl">₹{quantity * 299}</span>
-            </div>
+            <Button
+              data-splitbee-event="Order clicked"
+              className="w-full"
+              type="submit"
+              onClick={handleSubmit}
+              disabled={isLoading || !isFormValid}>
+              {isLoading ? "Processing..." : `Order Now (₹${quantity * 399})`}
+            </Button>
           </div>
-          {/* Contact Information */}
-          <div className="grid gap-4">
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                required
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="Enter your email"
-                className={errors.email ? "border-red-500" : ""}
-              />
-              {errors.email && (
-                <p className="text-sm text-red-500 mt-1">{errors.email}</p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="phone">Phone Number</Label>
-              <Input
-                required
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="Enter your phone number"
-                pattern="[0-9]{10}"
-                className={errors.phone ? "border-red-500" : ""}
-              />
-              {errors.phone && (
-                <p className="text-sm text-red-500 mt-1">{errors.phone}</p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="fullName">Full Name</Label>
-              <Input
-                required
-                type="text"
-                id="fullName"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleInputChange}
-                placeholder="Enter your full name"
-                className={errors.fullName ? "border-red-500" : ""}
-              />
-              {errors.fullName && (
-                <p className="text-sm text-red-500 mt-1">{errors.fullName}</p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="addressLine1">Address Line 1</Label>
-              <Input
-                required
-                type="text"
-                id="addressLine1"
-                name="addressLine1"
-                value={formData.addressLine1}
-                onChange={handleInputChange}
-                placeholder="Enter your address"
-                className={errors.addressLine1 ? "border-red-500" : ""}
-              />
-              {errors.addressLine1 && (
-                <p className="text-sm text-red-500 mt-1">
-                  {errors.addressLine1}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="addressLine2">Address Line 2</Label>
-              <Input
-                type="text"
-                id="addressLine2"
-                name="addressLine2"
-                value={formData.addressLine2}
-                onChange={handleInputChange}
-                placeholder="Apartment, suite, etc. (optional)"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="state">State</Label>
-              <Select
-                name="state"
-                value={formData.state}
-                onValueChange={handleStateChange}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a state" />
-                </SelectTrigger>
-                <SelectContent>
-                  {indianStates.map((state) => (
-                    <SelectItem key={state} value={state}>
-                      {state}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="pinCode">PIN Code</Label>
-              <Input
-                required
-                type="text"
-                id="pinCode"
-                name="pinCode"
-                value={formData.pinCode}
-                onChange={handleInputChange}
-                placeholder="Enter PIN code"
-                pattern="[0-9]{6}"
-                className={errors.pinCode ? "border-red-500" : ""}
-              />
-              {errors.pinCode && (
-                <p className="text-sm text-red-500 mt-1">{errors.pinCode}</p>
-              )}
-            </div>
-          </div>
-        </form>
-      </CardContent>
-      <CardFooter>
-        <Button
-          className="w-full"
-          type="submit"
-          onClick={handleSubmit}
-          disabled={isLoading || !isFormValid}>
-          {isLoading ? "Processing..." : `Pre-book Now (₹${quantity * 299})`}
-        </Button>
-      </CardFooter>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 };
 

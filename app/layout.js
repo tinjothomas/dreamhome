@@ -1,7 +1,11 @@
 import { Inter } from "next/font/google";
+import splitbee from "@splitbee/web";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
+
+// This initiliazes Splitbee.js
+splitbee.init();
 
 export const metadata = {
   title: "Kvika | Art and Decor",
