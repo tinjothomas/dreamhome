@@ -1,7 +1,10 @@
 // pages/api/payment-callback.js
 import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import crypto from "crypto";
+import sgMail from "@sendgrid/mail";
+
+// Initialize SendGrid with your API key
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 if (!getApps().length) {
   initializeApp({
@@ -90,6 +93,43 @@ export default async function handler(req, res) {
       status: status,
       transactionId: transactionId,
     });
+
+    //mail send
+    const msg = {
+      to: "tinjothomasc@gmail.com",
+      from: "sales@coredes.io",
+      subject: "A new order has been received!",
+      text: `
+        Dear Tinjo},
+
+        A new order has been received
+
+        Order Details:
+        Order Number: ${merchantTransactionId}
+        Status: ${status}
+        Amount Paid: ₹${amount / 100}
+
+        Thank you for shopping with us!
+      `,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2>Order has been received</h2>
+          <p>Dear Tinjo Thomas,</p>
+          <p>A new order has been received!</p>
+          
+          <h3>Order Details</h3>
+          <p>
+            <strong>Order Number:</strong> ${merchantTransactionId}<br>
+            <strong>Amount Paid:</strong> ₹${amount / 100}<br>
+            <strong>Status:</strong> ${status}
+          </p>
+        </div>
+      `,
+    };
+
+    // Send email
+    await sgMail.send(msg);
+    //
 
     res.status(200).json({ success: true });
   } catch (error) {

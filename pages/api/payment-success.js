@@ -1,50 +1,3 @@
-// // pages/api/payment-success.js
-// import sgMail from "@sendgrid/mail";
-
-// // Initialize SendGrid with your API key
-// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-// export default async function handler(req, res) {
-//   if (req.method !== "POST") {
-//     return res.status(405).json({ error: "Method not allowed" });
-//   }
-
-//   try {
-//     const { code, merchantId, transactionId, amount } = req.body;
-
-//     // Configure email message
-//     const msg = {
-//       to: "tinjothomasc@gmail.com",
-//       from: "sales@coredes.io",
-//       subject: "Payment Success Confirmation",
-//       text: `Payment successful!\n\nTransaction ID: ${transactionId}\nAmount: ${amount}\nMerchant ID: ${merchantId}\nCode: ${code}`,
-//       html: `
-//         <h2>Payment Successful!</h2>
-//         <p>Your payment has been processed successfully. Here are the details:</p>
-//         <ul>
-//           <li><strong>Transaction ID:</strong> ${transactionId}</li>
-//           <li><strong>Amount:</strong> ${amount}</li>
-//           <li><strong>Merchant ID:</strong> ${merchantId}</li>
-//           <li><strong>Code:</strong> ${code}</li>
-//         </ul>
-//         <p>Thank you for your business!</p>
-//       `,
-//     };
-
-//     // Send email
-//     await sgMail.send(msg);
-
-//     // Redirect to success page
-//     const redirectUrl = `/payment-success?code=${code}&transactionId=${transactionId}&amount=${amount}`;
-//     res.redirect(303, redirectUrl);
-//   } catch (error) {
-//     console.error("Error:", error);
-//     return res
-//       .status(500)
-//       .json({ error: "Failed to process payment notification" });
-//   }
-// }
-
 // pages/api/payment-success.js
 import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
@@ -144,15 +97,7 @@ export default async function handler(req, res) {
     };
 
     // Send email
-    console.log(JSON.stringify(req.body));
     await sgMail.send(msg);
-
-    // Update order status in Firebase
-    // await orderDoc.ref.update({
-    //   paymentStatus: "COMPLETED",
-    //   lastUpdated: new Date().toISOString(),
-    //   status: "payment_success",
-    // });
 
     // Redirect to success page
     const redirectUrl = `/payment-success?code=${code}&transactionId=${transactionId}&amount=${amount}`;

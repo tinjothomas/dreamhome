@@ -1,11 +1,8 @@
 import { Inter } from "next/font/google";
-import splitbee from "@splitbee/web";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
-
-// This initiliazes Splitbee.js
-splitbee.init();
 
 export const metadata = {
   title: "Kvika | Art and Decor",
@@ -22,6 +19,11 @@ export default function RootLayout({ children }) {
         <div className="bg-white min-h-screen items-center flex flex-col">
           {children}
         </div>
+        <Script
+          strategy="lazyOnload"
+          async
+          src="https://cdn.splitbee.io/sb.js"
+        />
       </body>
     </html>
   );

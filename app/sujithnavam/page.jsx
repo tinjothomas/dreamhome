@@ -1,368 +1,110 @@
 "use client";
+import Link from "next/link";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+// Import Swiper styles
+import "swiper/css";
+import { Card } from "@/components/ui/card";
 
-import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Minus, Plus } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-
-const PrebookForm = () => {
-  const [quantity, setQuantity] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [orderComplete, setOrderComplete] = useState(false);
-  const [orderDetails, setOrderDetails] = useState(null);
-  const [isFormValid, setIsFormValid] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [formData, setFormData] = useState({
-    email: "",
-    phone: "",
-    fullName: "",
-    addressLine1: "",
-    addressLine2: "",
-    state: "Kerala",
-    pinCode: "",
-  });
-
-  // Validation function
-  const validateForm = () => {
-    const newErrors = {};
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^[0-9]{10}$/;
-    const pinCodeRegex = /^[0-9]{6}$/;
-
-    if (!formData.email.match(emailRegex)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-    if (!formData.phone.match(phoneRegex)) {
-      newErrors.phone =
-        "Only include 10-digit phone number without space. Remove area codes (+91, 0) etc";
-    }
-    if (formData.fullName.trim().length === 0) {
-      newErrors.fullName = "Full name is required";
-    }
-    if (formData.addressLine1.trim().length === 0) {
-      newErrors.addressLine1 = "Address is required";
-    }
-    if (!formData.pinCode.match(pinCodeRegex)) {
-      newErrors.pinCode = "Please enter a valid 6-digit PIN code";
-    }
-
-    setErrors(newErrors);
-    setIsFormValid(Object.keys(newErrors).length === 0);
-  };
-
-  // Run validation whenever form data changes
-  useEffect(() => {
-    validateForm();
-  }, [formData]);
-
-  const indianStates = [
-    "Andhra Pradesh",
-    "Arunachal Pradesh",
-    "Assam",
-    "Bihar",
-    "Chhattisgarh",
-    "Goa",
-    "Gujarat",
-    "Haryana",
-    "Himachal Pradesh",
-    "Jharkhand",
-    "Karnataka",
-    "Kerala",
-    "Madhya Pradesh",
-    "Maharashtra",
-    "Manipur",
-    "Meghalaya",
-    "Mizoram",
-    "Nagaland",
-    "Odisha",
-    "Punjab",
-    "Rajasthan",
-    "Sikkim",
-    "Tamil Nadu",
-    "Telangana",
-    "Tripura",
-    "Uttar Pradesh",
-    "Uttarakhand",
-    "West Bengal",
+export const Slider = () => {
+  const images = [
+    {
+      id: 1,
+      url: "/1.jpg",
+      alt: "Nature landscape",
+      caption: "Beautiful mountain vista",
+    },
+    {
+      id: 2,
+      url: "/2.jpg",
+      alt: "City skyline",
+      caption: "Urban architecture",
+    },
+    {
+      id: 3,
+      url: "/3.jpg",
+      alt: "Ocean view",
+      caption: "Serene seascape",
+    },
   ];
-
-  const handleQuantityChange = (action) => {
-    if (action === "increase") {
-      setQuantity((prev) => prev + 1);
-    } else if (action === "decrease" && quantity > 1) {
-      setQuantity((prev) => prev - 1);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleStateChange = (value) => {
-    setFormData((prev) => ({
-      ...prev,
-      state: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!isFormValid) {
-      // Show all validation errors when attempting to submit
-      validateForm();
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      const orderData = {
-        ...formData,
-        quantity,
-        totalAmount: quantity * 399,
-        timestamp: new Date().toISOString(),
-        status: "pending",
-      };
-
-      const response = await fetch("/api/initiate-payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ orderData }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to initiate payment");
-      }
-
-      const data = await response.json();
-
-      if (data.success) {
-        window.location.href = data.paymentRedirectUrl;
-      } else {
-        throw new Error("Payment initiation failed");
-      }
-    } catch (error) {
-      console.error("Error processing order:", error);
-      alert("There was an error processing your payment. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  if (orderComplete && orderDetails) {
-    return <SuccessPage orderDetails={orderDetails} />;
-  }
-
   return (
-    <div>
-      {/* container */}
-      <div className="flex flex-col bg-white rounded-md border shadow-md p-4">
-        {/* header */}
-        <div className="flex items-center flex-row border-b pb-4 mb-3">
-          <img
-            className="w-40 rounded-lg mr-4"
-            src="mockup.jpg"
-            alt="calendar image"
-          />
-          <div>
-            <h2 className="md:text-2xl text-xl font-semibold">
-              Buy 2025 Calendar by SujithNavam
-            </h2>
-            <p className="text-slate-500 mt-2">Delivery in 4-6 days</p>
-          </div>
-        </div>
-        {/* header ends */}
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="md:w-[448px]">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid gap-4">
-                <div>
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    required
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="Enter your email"
-                    className={errors.email ? "border-red-500" : ""}
-                  />
-                  {errors.email && (
-                    <p className="text-sm text-red-500 mt-1">{errors.email}</p>
-                  )}
-                </div>
-
-                <div>
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input
-                    required
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="Enter your phone number"
-                    pattern="[0-9]{10}"
-                    className={errors.phone ? "border-red-500" : ""}
-                  />
-                  {errors.phone && (
-                    <p className="text-sm text-red-500 mt-1">{errors.phone}</p>
-                  )}
-                </div>
-
-                <div>
-                  <Label htmlFor="fullName">Full Name</Label>
-                  <Input
-                    required
-                    type="text"
-                    id="fullName"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    placeholder="Enter your full name"
-                    className={errors.fullName ? "border-red-500" : ""}
-                  />
-                  {errors.fullName && (
-                    <p className="text-sm text-red-500 mt-1">
-                      {errors.fullName}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <Label htmlFor="addressLine1">Address Line 1</Label>
-                  <Input
-                    required
-                    type="text"
-                    id="addressLine1"
-                    name="addressLine1"
-                    value={formData.addressLine1}
-                    onChange={handleInputChange}
-                    placeholder="Enter your address"
-                    className={errors.addressLine1 ? "border-red-500" : ""}
-                  />
-                  {errors.addressLine1 && (
-                    <p className="text-sm text-red-500 mt-1">
-                      {errors.addressLine1}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <Label htmlFor="addressLine2">Address Line 2</Label>
-                  <Input
-                    type="text"
-                    id="addressLine2"
-                    name="addressLine2"
-                    value={formData.addressLine2}
-                    onChange={handleInputChange}
-                    placeholder="Apartment, suite, etc. (optional)"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="state">State</Label>
-                  <Select
-                    name="state"
-                    value={formData.state}
-                    onValueChange={handleStateChange}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a state" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {indianStates.map((state) => (
-                        <SelectItem key={state} value={state}>
-                          {state}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label htmlFor="pinCode">PIN Code</Label>
-                  <Input
-                    required
-                    type="text"
-                    id="pinCode"
-                    name="pinCode"
-                    value={formData.pinCode}
-                    onChange={handleInputChange}
-                    placeholder="Enter PIN code"
-                    pattern="[0-9]{6}"
-                    className={errors.pinCode ? "border-red-500" : ""}
-                  />
-                  {errors.pinCode && (
-                    <p className="text-sm text-red-500 mt-1">
-                      {errors.pinCode}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </form>
-          </div>
-          <div>
-            <div className="bg-yellow-50 border border-yellow-200 p-4 min-w-[280px] rounded-lg mb-6">
-              <div className="flex justify-between items-center mb-2">
-                <span className="font-medium text-slate-600">
-                  Product Price:
-                </span>
-                <span>₹399</span>
-              </div>
-              <div className="flex justify-between border-t border-b py-4 items-center">
-                <span className="font-medium text-slate-600">Quantity:</span>
-                <div className="flex items-center space-x-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleQuantityChange("decrease")}>
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <span className="w-8 text-center">{quantity}</span>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleQuantityChange("increase")}>
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-              <div className="flex justify-between items-center mt-2 font-medium">
-                <span className="text-slate-600">Total Amount:</span>
-                <span className="text-xl">₹{quantity * 399}</span>
-              </div>
+    <div className="w-full max-w-96 md:max-w-2xl max-h-64 md:max-h-full rounded-lg overflow-hidden">
+      <Swiper
+        modules={[Navigation, Pagination, Autoplay]}
+        spaceBetween={0}
+        slidesPerView={1}
+        navigation
+        pagination={{ clickable: true }}
+        autoplay={{
+          delay: 2000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
+        loop={true}
+        className="md:h-[500px]">
+        {images.map((image) => (
+          <SwiperSlide key={image.id}>
+            <div className="relative h-full">
+              <img
+                src={image.url}
+                alt={image.alt}
+                className="w-full h-full object-cover"
+              />
             </div>
-            <Button
-              data-splitbee-event="Order clicked"
-              className="w-full"
-              type="submit"
-              onClick={handleSubmit}
-              disabled={isLoading || !isFormValid}>
-              {isLoading ? "Processing..." : `Order Now (₹${quantity * 399})`}
-            </Button>
-          </div>
-        </div>
-      </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 };
 
-export default PrebookForm;
+export default function Product() {
+  return (
+    <div className="flex flex-col md:flex-row md:px-12 px-6 md:py-20 py-5">
+      {/* <img
+        className="rounded-xl max-h-[500px]"
+        src="/mockup.jpg"
+        alt="calendar"
+      /> */}
+      <Slider />
+      <div className="flex flex-col mt-8 md:mt-0 md:px-12 px-6 justify-between z-10">
+        <div className="flex flex-col">
+          <p className="text-red-400">New Launch</p>
+          <h2 className="text-2xl text-slate-800">
+            2025 Artistic Calendar by{" "}
+          </h2>
+          <a
+            target="_blank"
+            href="https://www.facebook.com/artpageofvtsujith"
+            className="flex items-center mt-6 gap-4 hover:translate-x-2 transition">
+            <img
+              className="md:max-h-28 max-h-14 rounded-full"
+              src="/sujith.jpg"
+              alt=""
+            />
+            <p className="text-slate-500 text-xl md:text-2xl">SujithNavam</p>
+          </a>
+        </div>
+        <div className="flex flex-col items-start">
+          <p className="text-slate-600 mt-4">
+            Table-Top Calendar, featuring 12 original paintings. <br /> Perfect
+            for your desk or as a gift!
+          </p>
+          <p className="text-lg px-3 py-1 border border-dashed border-green-300 rounded-md bg-green-50 text-green-800 my-4">
+            - 🚚 Free Shipping<br></br> - All India delivery in 4-6 days.
+          </p>
+          <div className="flex gap-6 mb-2 w-full items-center">
+            <p className="line-through text-slate-700 text-2xl">Rs.399</p>
+            <p className=" text-green-700 text-2xl">Rs.368/-</p>
+          </div>
+          <Link
+            data-splitbee-event="Checkout"
+            className="bg-red-400 w-full md:max-w-36 flex justify-center shadow-md hover:bg-green-500 p-4 px-6 text-white font-medium rounded-md"
+            href="/checkout">
+            Buy Now
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}

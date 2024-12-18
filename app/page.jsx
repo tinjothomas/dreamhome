@@ -40,14 +40,14 @@ export default function page() {
               Table-Top Calendar, featuring 12 original paintings. <br />{" "}
               Perfect for your desk or as a gift!
             </p>
-            <p className="text-lg text-slate-800 my-4">
-              Pre-booking has started, with only limited numbers available.
+            <p className="text-lg px-3 py-1 border border-dashed border-green-300 rounded-md bg-green-50 text-green-800 my-4">
+              All India delivery in 4-6 days.
             </p>
             <Link
-              data-splitbee-event="Buy now sujith"
+              data-splitbee-event="View product - Sujith"
               className="bg-red-400 shadow-md hover:bg-green-500 p-4 px-6 text-white font-medium rounded-md"
               href="/sujithnavam">
-              Buy Now Rs.399/-
+              View Product
             </Link>
           </div>
         </div>
