@@ -28,7 +28,7 @@ export const Slider = () => {
     },
   ];
   return (
-    <div className="w-full max-w-96 md:max-w-2xl max-h-64 md:max-h-full rounded-lg overflow-hidden">
+    <div className="w-full max-w-[340px] md:max-w-2xl max-h-64 md:max-h-full rounded-lg overflow-hidden">
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={0}
@@ -60,14 +60,14 @@ export const Slider = () => {
 
 export default function Product() {
   return (
-    <div className="flex flex-col md:flex-row md:px-12 px-6 md:py-20 py-5">
+    <div className="flex flex-col md:flex-row md:px-12 px-6 md:py-20 mt-4 md:mt-0 py-5">
       {/* <img
         className="rounded-xl max-h-[500px]"
         src="/mockup.jpg"
         alt="calendar"
       /> */}
       <Slider />
-      <div className="flex flex-col mt-8 md:mt-0 md:px-12 px-6 justify-between z-10">
+      <div className="flex flex-col mt-8 md:mt-0 md:px-12 justify-between z-10">
         <div className="flex flex-col">
           <p className="text-red-400">New Launch</p>
           <h2 className="text-2xl text-slate-800">
@@ -86,10 +86,11 @@ export default function Product() {
           </a>
         </div>
         <div className="flex flex-col items-start">
-          <p className="text-slate-600 mt-4">
-            Table-Top Calendar, featuring 12 original paintings. <br /> Perfect
-            for your desk or as a gift!
-          </p>
+          <ul className="text-slate-600 mt-4 ml-4 list-disc">
+            <li>Table-Top Calendar</li>
+            <li>Featuring 12 original paintings.</li>
+            <li>Perfect for your desk or as a gift!</li>
+          </ul>
           <p className="text-lg px-3 py-1 border border-dashed border-green-300 rounded-md bg-green-50 text-green-800 my-4">
             - 🚚 Free Shipping<br></br> - All India delivery in 4-6 days.
           </p>

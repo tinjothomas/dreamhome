@@ -38,7 +38,7 @@ export default function Layout({ children }) {
       <div className="w-full max-w-7xl">
         <Header />
       </div>
-      <div className="p-6 md:p-0">{children}</div>
+      <div>{children}</div>
       <div className="w-full max-w-7xl">
         <Footer />
       </div>
