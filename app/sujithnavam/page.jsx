@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 // Import Swiper styles
 import "swiper/css";
-import { Card } from "@/components/ui/card";
+import { price } from "@/lib/price";
 
 export const Slider = () => {
   const images = [
@@ -24,6 +24,12 @@ export const Slider = () => {
       id: 3,
       url: "/3.jpg",
       alt: "Ocean view",
+      caption: "Serene seascape",
+    },
+    {
+      id: 4,
+      url: "/4.jpg",
+      alt: "Thumbnails",
       caption: "Serene seascape",
     },
   ];
@@ -96,14 +102,19 @@ export default function Product() {
           </p>
           <div className="flex gap-6 mb-2 w-full items-center">
             <p className="line-through text-slate-700 text-2xl">Rs.399</p>
-            <p className=" text-green-700 text-2xl">Rs.368/-</p>
+            <p className=" text-green-700 text-2xl">Rs.{price.sujith}/-</p>
           </div>
-          <Link
-            data-splitbee-event="Checkout"
-            className="bg-red-400 w-full md:max-w-36 flex justify-center shadow-md hover:bg-green-500 p-4 px-6 text-white font-medium rounded-md"
-            href="/checkout">
-            Buy Now
-          </Link>
+          <div className="flex items-center gap-2">
+            <p className="bg-yellow-100 text-sm border border-dashed border-yellow-600 rounded-md px-3 py-1">
+              Special New Year OFFER 👉
+            </p>
+            <Link
+              data-splitbee-event="Checkout"
+              className="bg-red-400 w-full md:max-w-36 flex justify-center shadow-md hover:bg-green-500 p-4 px-6 text-white font-medium rounded-md"
+              href="/checkout">
+              Buy Now
+            </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Minus, Plus } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { price } from "@/lib/price";
 
 const PrebookForm = () => {
   const [quantity, setQuantity] = useState(1);
@@ -132,7 +132,7 @@ const PrebookForm = () => {
       const orderData = {
         ...formData,
         quantity,
-        totalAmount: quantity * 368,
+        totalAmount: quantity * price.sujith,
         timestamp: new Date().toISOString(),
         status: "pending",
       };
@@ -323,7 +323,7 @@ const PrebookForm = () => {
                 <span className="font-medium text-slate-600">
                   Product Price:
                 </span>
-                <span>₹368</span>
+                <span>₹{price.sujith}</span>
               </div>
               <div className="flex justify-between border-t border-b py-4 items-center">
                 <span className="font-medium text-slate-600">Quantity:</span>
@@ -347,7 +347,7 @@ const PrebookForm = () => {
               </div>
               <div className="flex justify-between items-center mt-2 font-medium">
                 <span className="text-slate-600">Total Amount:</span>
-                <span className="text-xl">₹{quantity * 368}</span>
+                <span className="text-xl">₹{quantity * price.sujith}</span>
               </div>
             </div>
             <Button
@@ -356,7 +356,9 @@ const PrebookForm = () => {
               type="submit"
               onClick={handleSubmit}
               disabled={isLoading || !isFormValid}>
-              {isLoading ? "Processing..." : `Order Now (₹${quantity * 368})`}
+              {isLoading
+                ? "Processing..."
+                : `Order Now (₹${quantity * price.sujith})`}
             </Button>
           </div>
         </div>
