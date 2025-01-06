@@ -6,8 +6,10 @@ export const metadata = {
 
 export default function Layout({ children }) {
   return (
-    <div className="bg-slate-100 flex py-3 md:py-6 flex-col items-center w-full min-h-screen">
-      <Link href="/">
+    <div
+      data-splitbee-event="back to product page"
+      className="bg-slate-100 flex py-3 md:py-6 flex-col items-center w-full min-h-screen">
+      <Link href="/sujithnavam">
         <div className="max-w-xl flex items-center gap-4 w-full mb-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +24,7 @@ export default function Layout({ children }) {
             viewBox="0 0 24 24">
             <path d="m12 19-7-7 7-7M19 12H5"></path>
           </svg>
-          <span>Back to main site</span>
+          <span>Back to product page</span>
         </div>
       </Link>
       {children}
